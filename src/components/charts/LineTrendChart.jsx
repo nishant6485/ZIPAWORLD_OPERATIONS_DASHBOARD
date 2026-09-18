@@ -35,12 +35,12 @@ export default function LineTrendChart({
     if (onDateRangeChange) onDateRangeChange(period);
   };
 
-  // Metric definitions
+  // Metric definitions matching Enterprise Logistics Palette
   const metrics = [
-    { key: 'total', altKey: 'volume', label: 'Total', titleLabel: 'Total Shipment Volume', color: '#0284C7', stroke: '#0284C7', bg: 'rgba(2, 132, 199, 0.15)' },
-    { key: 'completed', altKey: 'completed', label: 'Completed', titleLabel: 'Completed Shipment Volume', color: '#10B981', stroke: '#10B981', bg: 'rgba(16, 185, 129, 0.15)' },
-    { key: 'delayed', altKey: 'delayed', label: 'Delayed', titleLabel: 'Delayed Shipment Volume', color: '#EF4444', stroke: '#EF4444', bg: 'rgba(239, 68, 68, 0.15)' },
-    { key: 'onTime', altKey: 'onTimeRate', label: 'On-Time', titleLabel: 'On-Time Shipment Volume', color: '#6366F1', stroke: '#6366F1', bg: 'rgba(99, 102, 241, 0.15)' },
+    { key: 'total', altKey: 'volume', label: 'Total', titleLabel: 'Total Shipment Volume', color: '#2563EB', stroke: '#2563EB', bg: 'rgba(37, 99, 235, 0.12)' },
+    { key: 'completed', altKey: 'completed', label: 'Completed', titleLabel: 'Completed Shipment Volume', color: '#059669', stroke: '#059669', bg: 'rgba(5, 150, 105, 0.12)' },
+    { key: 'delayed', altKey: 'delayed', label: 'Delayed', titleLabel: 'Delayed Shipment Volume', color: '#E11D48', stroke: '#E11D48', bg: 'rgba(225, 29, 72, 0.12)' },
+    { key: 'onTime', altKey: 'onTimeRate', label: 'On-Time', titleLabel: 'On-Time Shipment Volume', color: '#0D9488', stroke: '#0D9488', bg: 'rgba(13, 148, 136, 0.12)' },
   ];
 
   const currentMetric = metrics.find(m => m.key === selectedMetric || m.altKey === selectedMetric) || metrics[0];
@@ -96,15 +96,12 @@ export default function LineTrendChart({
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
-  // Active Metric key mapping for values
   const activeValueKey = currentMetric.key === 'total' ? 'total' : currentMetric.key;
 
-  // Values calculation
   const values = chartSeries.map(d => d[activeValueKey] ?? d['volume'] ?? 0);
   const maxValue = Math.max(...values, 5);
   const minValue = 0;
 
-  // Point coordinates calculation
   const points = chartSeries.map((d, index) => {
     const val = d[activeValueKey] ?? d['volume'] ?? 0;
     const x = padding.left + (index / Math.max(chartSeries.length - 1, 1)) * chartWidth;
@@ -112,18 +109,16 @@ export default function LineTrendChart({
     return { x, y, val, dataPoint: d };
   });
 
-  // SVG path definitions
   const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
   const areaPath = `${linePath} L ${padding.left + chartWidth} ${padding.top + chartHeight} L ${padding.left} ${padding.top + chartHeight} Z`;
 
-  // Dynamic Title & Period Display Text
   const periodText = selectedPeriod.toUpperCase() === '7D' ? 'Last 7 Days' : selectedPeriod.toUpperCase() === '90D' ? 'Last 90 Days' : 'Last 30 Days';
   const dynamicTitle = `${currentMetric.titleLabel} — ${periodText}`;
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
         <div>
           <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: currentMetric.color }} />
@@ -137,18 +132,17 @@ export default function LineTrendChart({
         {showFilters && (
           <div className="flex flex-wrap items-center gap-3">
             {/* METRIC CONTROLS: [ Total ] [ Completed ] [ Delayed ] [ On-Time ] */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
+            <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 overflow-x-auto whitespace-nowrap scrollbar-none">
               {metrics.map(m => {
                 const isActive = selectedMetric === m.key || (selectedMetric === 'volume' && m.key === 'total');
                 return (
                   <button
                     key={m.key}
                     onClick={() => handleMetricClick(m.key)}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${
-                      isActive
+                    className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${isActive
                         ? 'bg-white text-slate-900 shadow-xs border border-slate-300'
                         : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                      }`}
                     style={isActive ? { borderColor: m.color, color: m.color } : {}}
                   >
                     {m.label}
@@ -165,11 +159,10 @@ export default function LineTrendChart({
                   <button
                     key={p}
                     onClick={() => handlePeriodClick(p)}
-                    className={`px-3 py-1.5 text-xs font-black rounded-md transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-red-600 text-white shadow-xs'
+                    className={`px-3 py-1.5 text-xs font-black rounded-md transition-all cursor-pointer ${isActive
+                        ? 'bg-blue-600 text-white font-bold shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                      }`}
                   >
                     {p.toUpperCase()}
                   </button>
@@ -291,12 +284,13 @@ export default function LineTrendChart({
 
       {/* Auto Insight Footer */}
       {insight && (
-        <div className="mt-4 pt-3 border-t border-slate-200 flex items-start gap-2 text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-          <span className="text-red-600 font-bold">💡 INSIGHT:</span>
+        <div className="mt-4 pt-3 border-t border-slate-100 flex items-start gap-2 text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+          <span className="text-blue-600 font-bold">💡 INSIGHT:</span>
           <span>{insight}</span>
         </div>
       )}
     </div>
   );
 }
+
 

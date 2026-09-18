@@ -6,14 +6,9 @@ import {
   Ship, 
   Plane, 
   CheckCircle2, 
-  Clock, 
   FileText, 
-  MessageSquare, 
   User, 
-  ArrowRight,
-  CheckSquare,
-  Search,
-  ExternalLink
+  ArrowRight
 } from 'lucide-react';
 
 export function ShipmentDrawer({ shipmentId, onClose }) {
@@ -22,11 +17,10 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
     tasks,
     updateWorkflowStep, 
     addOperationalNote, 
-    addFollowUp,
     completeTask
   } = useOperations();
 
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'workflow', 'documents', 'tasks', 'notes'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'workflow', 'documents', 'tasks', 'tracking', 'notes'
   const [newNoteText, setNewNoteText] = useState('');
 
   if (!shipmentId) return null;
@@ -55,37 +49,37 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/60 backdrop-blur-xs transition-opacity animate-fade-in">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/60 backdrop-blur-xs transition-opacity animate-fade-in" onClick={onClose}>
       <div 
-        className="w-full max-w-2xl bg-white border-l border-slate-200 text-slate-800 flex flex-col h-full shadow-2xl overflow-hidden"
+        className="w-full max-w-2xl bg-white border-l border-slate-200 text-slate-900 flex flex-col h-full shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Drawer Bar */}
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-900 text-white">
+        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-white text-slate-900">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700">
-                {isAir ? <Plane className="w-3.5 h-3.5 text-red-500" /> : <Ship className="w-3.5 h-3.5 text-red-500" />}
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-bold bg-slate-100 text-blue-700 border border-slate-200">
+                {isAir ? <Plane className="w-3.5 h-3.5 text-teal-600" /> : <Ship className="w-3.5 h-3.5 text-sky-600" />}
                 {shipment.mode} {shipment.direction} ({shipment.shipmentType})
               </span>
               <span className={`px-2.5 py-0.5 rounded text-xs font-bold ${
-                shipment.health === 'Delayed' ? 'bg-red-950 text-red-400 border border-red-800' :
-                shipment.health === 'At Risk' ? 'bg-amber-950 text-amber-400 border border-amber-800' :
-                'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                shipment.health === 'Delayed' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                shipment.health === 'At Risk' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                'bg-emerald-50 text-emerald-700 border border-emerald-200'
               }`}>
                 {shipment.currentStatus}
               </span>
             </div>
-            <h2 className="text-lg font-extrabold text-white mt-1 flex items-center gap-2">
+            <h2 className="text-lg font-extrabold text-slate-900 mt-1 flex items-center gap-2">
               <span>{shipment.id}</span>
-              <span className="text-xs font-normal text-slate-400">({shipment.jobNo})</span>
+              <span className="text-xs font-normal text-slate-500">({shipment.jobNo})</span>
             </h2>
-            <p className="text-xs text-slate-400 font-medium">{shipment.customer}</p>
+            <p className="text-xs text-slate-600 font-medium">{shipment.customer}</p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -129,14 +123,14 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
 
           <div>
             <div className="text-[10px] uppercase font-bold text-slate-500">Schedule</div>
-            <div className="text-slate-700 mt-0.5">ETD: <strong className="text-slate-900">{shipment.etd}</strong></div>
-            <div className="text-slate-700">ETA: <strong className="text-slate-900">{shipment.eta}</strong></div>
+            <div className="text-slate-700 mt-0.5">ETD: <strong className="text-slate-900 font-mono">{shipment.etd}</strong></div>
+            <div className="text-slate-700">ETA: <strong className="text-slate-900 font-mono">{shipment.eta}</strong></div>
           </div>
 
           <div>
             <div className="text-[10px] uppercase font-bold text-slate-500">Assigned</div>
             <div className="font-bold text-slate-900 mt-0.5 flex items-center gap-1">
-              <User className="w-3.5 h-3.5 text-red-600" />
+              <User className="w-3.5 h-3.5 text-blue-600" />
               <span>{shipment.assignedTo}</span>
             </div>
           </div>
@@ -144,19 +138,19 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
           <div>
             <div className="text-[10px] uppercase font-bold text-slate-500">Progress</div>
             <div className="mt-1 flex items-center gap-2">
-              <div className="flex-1 bg-slate-200 h-2 rounded-full overflow-hidden border border-slate-300">
+              <div className="flex-1 bg-slate-200 h-2 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full rounded-full ${shipment.progress === 100 ? 'bg-emerald-500' : 'bg-red-600'}`}
+                  className={`h-full rounded-full ${shipment.progress === 100 ? 'bg-emerald-500' : 'bg-blue-600'}`}
                   style={{ width: `${shipment.progress}%` }}
                 />
               </div>
-              <span className="font-bold text-red-600 text-xs">{shipment.progress}%</span>
+              <span className="font-bold text-blue-600 text-xs">{shipment.progress}%</span>
             </div>
           </div>
         </div>
 
-        {/* Tab Bar */}
-        <div className="flex border-b border-slate-200 px-6 bg-white text-xs font-bold overflow-x-auto shadow-xs">
+        {/* Horizontally Scrollable Tab Bar for Mobile Responsiveness */}
+        <div className="flex border-b border-slate-200 px-4 bg-white text-xs font-bold overflow-x-auto whitespace-nowrap scrollbar-none shrink-0">
           {[
             { id: 'overview', label: 'Overview' },
             { id: 'workflow', label: 'Workflow' },
@@ -168,8 +162,8 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-3 px-4 border-b-2 transition-colors whitespace-nowrap ${
-                activeTab === tab.id ? 'border-red-600 text-red-600 font-extrabold' : 'border-transparent text-slate-600 hover:text-slate-900'
+              className={`py-3 px-4 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
+                activeTab === tab.id ? 'border-blue-600 text-blue-600 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
               {tab.label}
@@ -186,22 +180,22 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                   <span className="font-bold text-slate-900 text-sm">Operational Milestone Summary</span>
-                  <span className="px-2.5 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200 text-[11px]">
+                  <span className="px-2.5 py-0.5 rounded bg-white text-blue-700 font-bold border border-slate-200 text-[11px]">
                     {shipment.currentStatus}
                   </span>
                 </div>
                 <p className="text-slate-700">
-                  Current Workflow Stage: <strong className="text-red-600 font-semibold">{shipment.currentStatus}</strong>
+                  Current Workflow Stage: <strong className="text-blue-600 font-semibold">{shipment.currentStatus}</strong>
                 </p>
-                <p className="text-slate-600">
+                <p className="text-slate-700">
                   Next Action: <strong className="text-amber-700 font-semibold">{shipment.nextAction || 'Pending Milestone Verification'}</strong>
                 </p>
-                <p className="text-slate-600">
-                  Estimated Arrival (ETA): <strong className="text-slate-900 font-mono">{shipment.eta}</strong> (ETD: <span className="font-mono text-slate-700">{shipment.etd}</span>)
+                <p className="text-slate-700">
+                  Estimated Arrival (ETA): <strong className="text-slate-900 font-mono">{shipment.eta}</strong> (ETD: <span className="font-mono text-slate-500">{shipment.etd}</span>)
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
                   <div className="text-[10px] text-slate-500 font-bold uppercase">Shipper / Customer</div>
                   <div className="font-semibold text-slate-900 mt-0.5">{shipment.customer}</div>
@@ -233,15 +227,15 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
                   return (
                     <div key={step.id || step.stepNumber} className="relative group">
                       <div className={`absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isDone ? 'bg-emerald-600 border-emerald-500 text-white' :
-                        isCurrent ? 'bg-red-600 border-red-400 ring-4 ring-red-100 animate-pulse' :
+                        isDone ? 'bg-emerald-500 border-emerald-600 text-white' :
+                        isCurrent ? 'bg-blue-600 border-blue-500 ring-4 ring-blue-100 animate-pulse' :
                         'bg-white border-slate-300'
                       }`}>
                         {isDone && <CheckCircle2 className="w-3 h-3 text-white font-bold" />}
                       </div>
 
                       <div className={`p-3.5 rounded-lg border transition-colors ${
-                        isCurrent ? 'bg-red-50/50 border-red-300' :
+                        isCurrent ? 'bg-blue-50/60 border-blue-300' :
                         isDone ? 'bg-slate-50 border-slate-200' : 'bg-white border-slate-200 opacity-70'
                       }`}>
                         <div className="flex items-start justify-between gap-2">
@@ -253,16 +247,16 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
 
                           <button
                             onClick={() => updateWorkflowStep(shipment.id, step.id, isDone ? 'pending' : 'completed')}
-                            className={`px-2.5 py-1 rounded text-[10px] font-semibold transition-all ${
-                              isDone ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200' :
-                              isCurrent ? 'bg-red-600 text-white' : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+                            className={`px-2.5 py-1 rounded text-[10px] font-semibold transition-all cursor-pointer ${
+                              isDone ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' :
+                              isCurrent ? 'bg-blue-600 text-white font-bold hover:bg-blue-700' : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
                             }`}
                           >
                             {isDone ? '✓ Done' : isCurrent ? 'Mark Complete' : 'Pending'}
                           </button>
                         </div>
 
-                        <div className="flex items-center justify-between text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200">
+                        <div className="flex items-center justify-between text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-200/80">
                           <span>{step.completedDate ? `Completed: ${step.completedDate}` : `Due: ${step.dueDate || shipment.etd}`}</span>
                           <span>{step.completedBy ? `By: ${step.completedBy}` : `Assigned: ${step.assignedTo || shipment.assignedTo}`}</span>
                         </div>
@@ -283,14 +277,14 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
                 shipment.documents.map((doc) => (
                   <div key={doc.id} className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-amber-500" />
+                      <FileText className="w-4 h-4 text-blue-600" />
                       <div>
                         <div className="font-bold text-slate-900">{doc.name}</div>
                         <div className="text-[10px] text-slate-500">Type: {doc.type} • {doc.updatedAt}</div>
                       </div>
                     </div>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                      doc.status === 'Approved' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-amber-100 text-amber-700 border border-amber-200'
+                      doc.status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
                     }`}>
                       {doc.status}
                     </span>
@@ -314,7 +308,7 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
                     </div>
                     <button
                       onClick={() => completeTask(t.id)}
-                      className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold"
+                      className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[10px] font-bold cursor-pointer"
                     >
                       {t.status === 'Completed' ? '✓ Completed' : 'Complete'}
                     </button>
@@ -330,13 +324,13 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-900 text-sm">Live Location & Milestone Tracking</span>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold border border-emerald-200">
+                  <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold border border-emerald-200">
                     Live Feed Active
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 text-slate-700">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-700">
                   <div>Current Location: <strong className="text-slate-900">{shipment.pol || shipment.originAirport} (In Transit)</strong></div>
-                  <div>Estimated Arrival: <strong className="text-red-600 font-mono">{shipment.eta}</strong></div>
+                  <div>Estimated Arrival: <strong className="text-blue-600 font-mono">{shipment.eta}</strong></div>
                   <div>Vessel / Flight: <strong className="text-slate-900">{shipment.vessel || shipment.flightNumber || 'Active Carrier'}</strong></div>
                   <div>Carrier: <strong className="text-slate-900">{shipment.shippingLine || shipment.airline}</strong></div>
                 </div>
@@ -353,9 +347,9 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
                   placeholder="Add operational note..."
                   value={newNoteText}
                   onChange={(e) => setNewNoteText(e.target.value)}
-                  className="flex-1 bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 rounded-lg px-3 py-2 focus:outline-none focus:border-red-600"
+                  className="flex-1 bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-600"
                 />
-                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg font-bold">
+                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-bold cursor-pointer">
                   Post Note
                 </button>
               </form>
@@ -364,7 +358,7 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
                 {(shipment.notes || []).map((note) => (
                   <div key={note.id} className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold">
-                      <span className="text-red-600 font-bold">{note.author}</span>
+                      <span className="text-blue-600 font-bold">{note.author}</span>
                       <span>{note.date}</span>
                     </div>
                     <p className="text-slate-800">{note.text}</p>
@@ -380,3 +374,5 @@ export function ShipmentDrawer({ shipmentId, onClose }) {
     </div>
   );
 }
+
+

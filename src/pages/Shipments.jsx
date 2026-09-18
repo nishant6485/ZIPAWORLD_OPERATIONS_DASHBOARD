@@ -19,13 +19,13 @@ export function Shipments() {
     : shipments;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 text-slate-800">
+    <div className="max-w-7xl mx-auto space-y-6 text-slate-100">
       
       {/* Header Banner */}
-      <div className="bg-slate-900 text-white rounded-lg p-4 shadow-sm border-l-4 border-red-600 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-slate-900 text-white rounded-lg p-4 shadow-sm border border-slate-800 border-l-4 border-l-teal-500 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold flex items-center gap-2.5">
-            <Package className="w-5 h-5 text-red-500" />
+            <Package className="w-5 h-5 text-teal-400" />
             <span>Master Shipment Directory</span>
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -35,7 +35,7 @@ export function Shipments() {
 
         <button
           onClick={() => openQuickAction(activeMode === 'Air' ? 'create_air' : 'create_ocean')}
-          className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-xs font-bold shadow-sm transition-all"
+          className="flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold px-4 py-2 rounded text-xs shadow-sm transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>New Shipment</span>
@@ -46,7 +46,7 @@ export function Shipments() {
       <FilterBar />
 
       {/* Status Queue Tabs */}
-      <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1.5 w-fit text-xs font-bold shadow-sm">
+      <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-lg p-1.5 w-full sm:w-fit overflow-x-auto whitespace-nowrap scrollbar-none text-xs font-bold shadow-sm">
         {[
           { id: 'ALL', label: `All (${shipments.length})` },
           { id: 'Active', label: `Active (${stats.activeShipments})` },
@@ -56,8 +56,8 @@ export function Shipments() {
           <button
             key={tab.id}
             onClick={() => setStatusFilter(tab.id)}
-            className={`px-3 py-1.5 rounded transition-all ${
-              statusFilter === tab.id ? 'bg-red-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded transition-all shrink-0 ${
+              statusFilter === tab.id ? 'bg-teal-500 text-slate-950 font-bold shadow-xs' : 'text-slate-400 hover:text-white'
             }`}
           >
             {tab.label}

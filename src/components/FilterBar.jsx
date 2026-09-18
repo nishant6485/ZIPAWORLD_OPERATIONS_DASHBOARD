@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useOperations } from '../context/OperationsContext';
-import { Ship, Plane, Layers, User, Calendar } from 'lucide-react';
+import { Ship, Plane, Layers, User, Calendar, Filter, ChevronDown } from 'lucide-react';
 
 export function FilterBar() {
   const {
@@ -18,12 +18,13 @@ export function FilterBar() {
     executives
   } = useOperations();
 
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
   const hasOceanAccess = currentUser.access.includes('Ocean');
   const hasAirAccess = currentUser.access.includes('Air');
 
-  return (
-    <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs mb-6 flex flex-wrap items-center justify-between gap-4">
-      
+  const FilterContent = () => (
+    <div className="flex flex-wrap items-center justify-between gap-4 w-full">
       {/* Mode & Direction Selectors */}
       <div className="flex flex-wrap items-center gap-3">
         
@@ -33,7 +34,7 @@ export function FilterBar() {
             <button
               onClick={() => { setActiveMode('ALL'); setActiveShipmentType('ALL'); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeMode === 'ALL' ? 'bg-red-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                activeMode === 'ALL' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -45,7 +46,7 @@ export function FilterBar() {
             <button
               onClick={() => { setActiveMode('Ocean'); setActiveShipmentType('ALL'); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeMode === 'Ocean' ? 'bg-sky-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                activeMode === 'Ocean' ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Ship className="w-3.5 h-3.5" />
@@ -57,7 +58,7 @@ export function FilterBar() {
             <button
               onClick={() => { setActiveMode('Air'); setActiveShipmentType('ALL'); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeMode === 'Air' ? 'bg-teal-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                activeMode === 'Air' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Plane className="w-3.5 h-3.5" />
@@ -79,7 +80,7 @@ export function FilterBar() {
           <button
             onClick={() => setActiveDirection('EXPORT')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-              activeDirection === 'EXPORT' ? 'bg-emerald-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              activeDirection === 'EXPORT' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             EXPORT
@@ -108,7 +109,7 @@ export function FilterBar() {
             <button
               onClick={() => setActiveShipmentType('FCL')}
               className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeShipmentType === 'FCL' ? 'bg-sky-700 text-white' : 'text-slate-600 hover:text-slate-900'
+                activeShipmentType === 'FCL' ? 'bg-sky-600 text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               FCL
@@ -116,7 +117,7 @@ export function FilterBar() {
             <button
               onClick={() => setActiveShipmentType('LCL')}
               className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeShipmentType === 'LCL' ? 'bg-indigo-700 text-white' : 'text-slate-600 hover:text-slate-900'
+                activeShipmentType === 'LCL' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               LCL
@@ -137,7 +138,7 @@ export function FilterBar() {
             <button
               onClick={() => setActiveShipmentType('Air Cargo')}
               className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                activeShipmentType === 'Air Cargo' ? 'bg-teal-700 text-white' : 'text-slate-600 hover:text-slate-900'
+                activeShipmentType === 'Air Cargo' ? 'bg-teal-600 text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               AIR CARGO
@@ -151,8 +152,8 @@ export function FilterBar() {
       <div className="flex items-center gap-3">
         
         {/* Executive Filter Dropdown */}
-        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
-          <User className="w-3.5 h-3.5 text-slate-500" />
+        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
+          <User className="w-3.5 h-3.5 text-blue-600" />
           <select
             value={executiveFilter}
             onChange={(e) => setExecutiveFilter(e.target.value)}
@@ -168,8 +169,8 @@ export function FilterBar() {
         </div>
 
         {/* Date Filter Dropdown */}
-        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
-          <Calendar className="w-3.5 h-3.5 text-slate-500" />
+        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
+          <Calendar className="w-3.5 h-3.5 text-blue-600" />
           <select
             value={globalDateFilter}
             onChange={(e) => setGlobalDateFilter(e.target.value)}
@@ -183,7 +184,40 @@ export function FilterBar() {
         </div>
 
       </div>
+    </div>
+  );
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs mb-6">
+      
+      {/* Mobile Collapse Toggle Button [ Filters ▼ ] */}
+      <div className="md:hidden flex items-center justify-between">
+        <button
+          onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+          className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer w-full justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-blue-600" />
+            <span>Filters ({activeMode} / {activeDirection})</span>
+          </div>
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileFiltersOpen ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
+
+      {/* Desktop View: Always Visible */}
+      <div className="hidden md:block">
+        <FilterContent />
+      </div>
+
+      {/* Mobile Drawer/Accordion Popdown */}
+      {isMobileFiltersOpen && (
+        <div className="md:hidden mt-3 pt-3 border-t border-slate-200 space-y-4">
+          <FilterContent />
+        </div>
+      )}
 
     </div>
   );
 }
+
+

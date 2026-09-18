@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 @layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
   body {
     background-color: #F8FAFC;
     color: #0F172A;
@@ -10,7 +17,7 @@
   }
 }
 
-/* Custom light scrollbar for enterprise logistics tables and panels */
+/* Custom scrollbar for enterprise logistics tables and panels */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -33,9 +40,9 @@
 .logistics-card {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.25rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
 .table-row-spacious {
@@ -44,19 +51,28 @@
 }
 
 /* ZIPAWORLD Enterprise Buttons & Highlights */
-.btn-zipa-red {
-  background-color: #DC2626;
+.btn-zipa-primary {
+  background-color: #2563EB;
   color: #FFFFFF;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
-.btn-zipa-red:hover {
-  background-color: #B91C1C;
+.btn-zipa-primary:hover {
+  background-color: #1D4ED8;
 }
 
-.bg-zipa-dark {
-  background-color: #111827;
+.bg-zipa-navy {
+  background-color: #0F172A;
+}
+
+/* Scrollbar utilities for mobile responsiveness */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Subtle Pulsing Animations */
@@ -68,3 +84,5 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+

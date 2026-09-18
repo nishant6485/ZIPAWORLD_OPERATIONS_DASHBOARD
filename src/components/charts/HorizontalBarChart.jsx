@@ -59,11 +59,10 @@ export default function HorizontalBarChart({
               {/* Bar track */}
               <div className="w-full bg-slate-100 rounded-full h-3 p-0.5 overflow-hidden border border-slate-200">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    isTop
+                  className={`h-full rounded-full transition-all duration-500 ${isTop
                       ? 'bg-red-600 shadow-xs'
                       : 'bg-slate-700'
-                  }`}
+                    }`}
                   style={{
                     width: `${pct}%`,
                     backgroundColor: !isTop && item.color ? item.color : undefined

@@ -43,13 +43,13 @@ export const Reports = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto font-sans text-slate-800">
+    <div className="p-6 space-y-6 max-w-7xl mx-auto font-sans text-slate-100">
       
       {/* PAGE TITLE & CONTROL CENTER HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 text-white p-5 rounded-lg border-l-4 border-red-600 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 text-white p-5 rounded-lg border border-slate-800 border-l-4 border-l-teal-500 shadow-sm">
         <div>
           <h2 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
-            <span className="p-1.5 rounded bg-slate-800 text-red-500 border border-slate-700">
+            <span className="p-1.5 rounded bg-slate-800 text-teal-400 border border-slate-700">
               <BarChart3 className="w-5 h-5" />
             </span>
             ZIPAWORLD Operations Analytics Center
@@ -64,7 +64,7 @@ export const Reports = () => {
           {/* Shipment Type Selector */}
           <div className="flex items-center bg-slate-800 p-1 rounded border border-slate-700 text-xs">
             <span className="px-2 text-slate-400 font-semibold flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-red-500" /> Type:
+              <Filter className="w-3.5 h-3.5 text-teal-400" /> Type:
             </span>
             {['ALL', 'EXPORT', 'IMPORT'].map(type => (
               <button
@@ -72,7 +72,7 @@ export const Reports = () => {
                 onClick={() => setShipmentType(type)}
                 className={`px-3 py-1 font-bold rounded transition-all ${
                   shipmentType === type
-                    ? 'bg-red-600 text-white shadow'
+                    ? 'bg-teal-500 text-slate-950 shadow'
                     : 'text-slate-300 hover:text-white'
                 }`}
               >
@@ -84,7 +84,7 @@ export const Reports = () => {
           {/* Date Range Selector */}
           <div className="flex items-center bg-slate-800 p-1 rounded border border-slate-700 text-xs">
             <span className="px-2 text-slate-400 font-semibold flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-red-500" /> Period:
+              <Calendar className="w-3.5 h-3.5 text-teal-400" /> Period:
             </span>
             {['7d', '30d', '90d'].map(d => (
               <button
@@ -92,7 +92,7 @@ export const Reports = () => {
                 onClick={() => setDateRange(d)}
                 className={`px-2.5 py-1 font-bold rounded transition-all ${
                   dateRange === d
-                    ? 'bg-red-600 text-white'
+                    ? 'bg-teal-500 text-slate-950'
                     : 'text-slate-300 hover:text-white'
                 }`}
               >
@@ -104,7 +104,7 @@ export const Reports = () => {
       </div>
 
       {/* SUB-NAVIGATION TABS */}
-      <div className="flex items-center gap-1 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200">
+      <div className="flex items-center gap-1 overflow-x-auto pb-2 scrollbar-none border-b border-slate-800">
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -114,8 +114,8 @@ export const Reports = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded whitespace-nowrap transition-all ${
                 isActive
-                  ? 'bg-red-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-teal-500 text-slate-950 shadow-xs'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -257,26 +257,26 @@ export const Reports = () => {
             />
           </div>
 
-          <div className="bg-white border border-slate-200 p-5 rounded-lg text-xs space-y-3 shadow-sm">
-            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-red-600" /> Delay Statistics Summary
+          <div className="bg-slate-900 border border-slate-800 p-5 rounded-lg text-xs space-y-3 shadow-sm">
+            <h3 className="font-bold text-white text-sm flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-400" /> Delay Statistics Summary
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-800">
-              <div className="bg-slate-50 p-3 rounded border border-slate-200">
-                <span className="text-slate-500 block">Total Delayed:</span>
-                <span className="text-lg font-bold font-mono text-red-600">{currentStats?.delayedShipments} shipments</span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-300">
+              <div className="bg-slate-950 p-3 rounded border border-slate-800">
+                <span className="text-slate-400 block">Total Delayed:</span>
+                <span className="text-lg font-bold font-mono text-rose-400">{currentStats?.delayedShipments} shipments</span>
               </div>
-              <div className="bg-slate-50 p-3 rounded border border-slate-200">
-                <span className="text-slate-500 block">Average Delay:</span>
-                <span className="text-lg font-bold font-mono text-amber-600">{currentStats?.avgDelay} days</span>
+              <div className="bg-slate-950 p-3 rounded border border-slate-800">
+                <span className="text-slate-400 block">Average Delay:</span>
+                <span className="text-lg font-bold font-mono text-amber-400">{currentStats?.avgDelay} days</span>
               </div>
-              <div className="bg-slate-50 p-3 rounded border border-slate-200">
-                <span className="text-slate-500 block">Median Delay:</span>
-                <span className="text-lg font-bold font-mono text-slate-800">{currentStats?.medianDelay} days</span>
+              <div className="bg-slate-950 p-3 rounded border border-slate-800">
+                <span className="text-slate-400 block">Median Delay:</span>
+                <span className="text-lg font-bold font-mono text-white">{currentStats?.medianDelay} days</span>
               </div>
-              <div className="bg-slate-50 p-3 rounded border border-slate-200">
-                <span className="text-slate-500 block">Max Delay:</span>
-                <span className="text-lg font-bold font-mono text-slate-900">{currentStats?.maxDelay} days</span>
+              <div className="bg-slate-950 p-3 rounded border border-slate-800">
+                <span className="text-slate-400 block">Max Delay:</span>
+                <span className="text-lg font-bold font-mono text-white">{currentStats?.maxDelay} days</span>
               </div>
             </div>
           </div>

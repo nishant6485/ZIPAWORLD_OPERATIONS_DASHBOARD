@@ -50,7 +50,7 @@ export function calculateOperationsStats(
     filteredShipments = filteredShipments.filter(s => s.shipmentType === typeFilter);
   }
 
-  const totalShipments = filteredShipments.length || 1;
+  const totalShipments = filteredShipments.length;
 
   // 2. COUNTS & KEY RATIOS
   const completedShipments = filteredShipments.filter(s => s.currentStatus === 'Delivered' || s.progress === 100).length;
@@ -63,17 +63,20 @@ export function calculateOperationsStats(
   const importCount = filteredShipments.filter(s => (s.direction || s.type || '').toUpperCase() === 'IMPORT').length;
 
   const delayedShipments = filteredShipments.filter(s => s.health === 'Delayed' || s.health === 'At Risk' || (s.delayDays && s.delayDays > 0)).length;
+  const needsAttentionCount = filteredShipments.filter(s => s.health === 'Delayed' || s.health === 'At Risk' || s.health === 'Attention Required').length;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const dueTodayCount = filteredShipments.filter(s => s.eta === todayStr || s.etd === todayStr || s.health === 'At Risk').length;
   const criticalCount = filteredShipments.filter(s => s.priority === 'Critical').length;
 
-  const oceanPercent = Math.round((oceanCount / totalShipments) * 100);
-  const airPercent = Math.round((airCount / totalShipments) * 100);
+  const oceanPercent = totalShipments > 0 ? Math.round((oceanCount / totalShipments) * 100) : 0;
+  const airPercent = totalShipments > 0 ? Math.round((airCount / totalShipments) * 100) : 0;
 
-  const exportPercent = Math.round((exportCount / totalShipments) * 100);
-  const importPercent = Math.round((importCount / totalShipments) * 100);
+  const exportPercent = totalShipments > 0 ? Math.round((exportCount / totalShipments) * 100) : 0;
+  const importPercent = totalShipments > 0 ? Math.round((importCount / totalShipments) * 100) : 0;
 
-  const completionRate = Math.round((completedShipments / totalShipments) * 100);
-  const delayRate = parseFloat(((delayedShipments / totalShipments) * 100).toFixed(1));
-  const onTimeRate = Math.round(((totalShipments - delayedShipments) / totalShipments) * 100);
+  const completionRate = totalShipments > 0 ? Math.round((completedShipments / totalShipments) * 100) : 0;
+  const delayRate = totalShipments > 0 ? parseFloat(((delayedShipments / totalShipments) * 100).toFixed(1)) : 0;
+  const onTimeRate = totalShipments > 0 ? Math.round(((totalShipments - delayedShipments) / totalShipments) * 100) : 100;
 
   // 3. DESCRIPTIVE STATISTICS FOR PROCESSING & DELAY TIMES
   const isAirSelected = modeFilter === 'Air';
@@ -252,6 +255,8 @@ export function calculateOperationsStats(
     exportCount,
     importCount,
     delayedShipments,
+    needsAttentionCount,
+    dueTodayCount,
     criticalCount,
     oceanPercent,
     airPercent,

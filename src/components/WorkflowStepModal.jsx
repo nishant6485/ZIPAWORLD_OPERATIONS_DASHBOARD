@@ -17,7 +17,7 @@ export const WorkflowStepModal = ({ shipmentId, step, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-fade-in">
       <div className="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden">
-        
+
         {/* Header */}
         <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
           <div>
@@ -33,7 +33,7 @@ export const WorkflowStepModal = ({ shipmentId, step, onClose }) => {
 
         {/* Body */}
         <div className="p-4 space-y-4 text-xs">
-          
+
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Update Milestone Status
@@ -49,9 +49,8 @@ export const WorkflowStepModal = ({ shipmentId, step, onClose }) => {
                   key={opt.value}
                   type="button"
                   onClick={() => setStatus(opt.value)}
-                  className={`p-2.5 rounded-lg border text-xs font-bold transition text-left ${
-                    status === opt.value ? `${opt.color} ring-2 ring-red-600` : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-                  }`}
+                  className={`p-2.5 rounded-lg border text-xs font-bold transition text-left ${status === opt.value ? `${opt.color} ring-2 ring-red-600` : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                    }`}
                 >
                   {opt.label}
                 </button>

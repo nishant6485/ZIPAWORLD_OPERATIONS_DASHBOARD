@@ -48,16 +48,16 @@ export const OperationsProvider = ({ children }) => {
   const [currentUserKey, setCurrentUserKey] = useState('manager'); // 'manager', 'oceanExec', 'airExec', 'allExec'
   const currentUser = MOCK_USERS[currentUserKey] || MOCK_USERS.manager;
 
-  const [shipments, setShipments] = useState(mockShipments);
-  const [tasks, setTasks] = useState(mockTasks);
+  const [rawShipments, setShipments] = useState(mockShipments);
+  const [rawTasks, setTasks] = useState(mockTasks);
   const [alerts, setAlerts] = useState(mockAlerts);
-  const [bookings, setBookings] = useState(mockBookings);
-  const [blRecords, setBLRecords] = useState(mockBLRecords);
-  const [documents, setDocuments] = useState(mockGlobalDocuments);
+  const [rawBookings, setBookings] = useState(mockBookings);
+  const [rawBLRecords, setBLRecords] = useState(mockBLRecords);
+  const [rawDocuments, setDocuments] = useState(mockGlobalDocuments);
   const [executives, setExecutives] = useState(mockExecutives);
   const [notifications, setNotifications] = useState(initialNotifications);
 
-  const [activeMode, setActiveMode] = useState('ALL'); // 'ALL', 'Ocean', 'Air'
+  const [activeModeState, setActiveModeState] = useState('ALL'); // 'ALL', 'Ocean', 'Air'
   const [activeDirection, setActiveDirection] = useState('ALL'); // 'ALL', 'EXPORT', 'IMPORT'
   const [activeShipmentType, setActiveShipmentType] = useState('ALL'); // 'ALL', 'FCL', 'LCL', 'Air Cargo'
   const [globalDateFilter, setGlobalDateFilter] = useState('30d');
@@ -70,6 +70,77 @@ export const OperationsProvider = ({ children }) => {
   const [isQuickActionModalOpen, setIsQuickActionModalOpen] = useState(false);
   const [quickActionType, setQuickActionType] = useState(null);
 
+  // Compute allowed modes for current user
+  const allowedModes = useMemo(() => {
+    if (!currentUser || !currentUser.access || currentUser.access.length === 0) return ['ALL', 'Ocean', 'Air'];
+    if (currentUser.access.length === 1) return currentUser.access;
+    return ['ALL', 'Ocean', 'Air'];
+  }, [currentUser]);
+
+  // Ensure activeMode is restricted to user permissions
+  const activeMode = useMemo(() => {
+    if (allowedModes.length === 1) return allowedModes[0];
+    if (!allowedModes.includes(activeModeState)) return 'ALL';
+    return activeModeState;
+  }, [allowedModes, activeModeState]);
+
+  const setActiveMode = (mode) => {
+    if (allowedModes.includes(mode)) {
+      setActiveModeState(mode);
+    }
+  };
+
+  // Filter datasets based on activeMode and user role
+  const shipments = useMemo(() => {
+    let list = rawShipments;
+    if (activeMode !== 'ALL') {
+      list = list.filter(s => s.mode === activeMode);
+    } else if (currentUser && currentUser.access && currentUser.access.length === 1) {
+      list = list.filter(s => s.mode === currentUser.access[0]);
+    }
+    return list;
+  }, [rawShipments, activeMode, currentUser]);
+
+  const tasks = useMemo(() => {
+    let list = rawTasks;
+    if (activeMode !== 'ALL') {
+      list = list.filter(t => t.mode === activeMode);
+    } else if (currentUser && currentUser.access && currentUser.access.length === 1) {
+      list = list.filter(t => t.mode === currentUser.access[0]);
+    }
+    return list;
+  }, [rawTasks, activeMode, currentUser]);
+
+  const documents = useMemo(() => {
+    let list = rawDocuments;
+    if (activeMode !== 'ALL') {
+      list = list.filter(d => d.mode === activeMode);
+    } else if (currentUser && currentUser.access && currentUser.access.length === 1) {
+      list = list.filter(d => d.mode === currentUser.access[0]);
+    }
+    return list;
+  }, [rawDocuments, activeMode, currentUser]);
+
+  const bookings = useMemo(() => {
+    let list = rawBookings;
+    if (activeMode !== 'ALL') {
+      list = list.filter(b => b.mode === activeMode);
+    } else if (currentUser && currentUser.access && currentUser.access.length === 1) {
+      list = list.filter(b => b.mode === currentUser.access[0]);
+    }
+    return list;
+  }, [rawBookings, activeMode, currentUser]);
+
+  const blRecords = useMemo(() => {
+    let list = rawBLRecords;
+    if (activeMode !== 'ALL') {
+      list = list.filter(b => b.mode === activeMode);
+    } else if (currentUser && currentUser.access && currentUser.access.length === 1) {
+      list = list.filter(b => b.mode === currentUser.access[0]);
+    }
+    return list;
+  }, [rawBLRecords, activeMode, currentUser]);
+
   const openQuickAction = (type) => {
     setQuickActionType(type);
     setIsQuickActionModalOpen(true);
@@ -80,9 +151,9 @@ export const OperationsProvider = ({ children }) => {
       setCurrentUserKey(userKey);
       const newU = MOCK_USERS[userKey];
       if (newU.access.length === 1) {
-        setActiveMode(newU.access[0]);
+        setActiveModeState(newU.access[0]);
       } else {
-        setActiveMode('ALL');
+        setActiveModeState('ALL');
       }
     }
   };
@@ -246,6 +317,7 @@ export const OperationsProvider = ({ children }) => {
     executives,
     notifications,
     activeMode,
+    allowedModes,
     setActiveMode,
     activeDirection,
     setActiveDirection,

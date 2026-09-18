@@ -116,11 +116,10 @@ export default function DonutDistributionChart({
                 key={idx}
                 onMouseEnter={() => setHoveredSlice(idx)}
                 onMouseLeave={() => setHoveredSlice(null)}
-                className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${
-                  isHovered
+                className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${isHovered
                     ? 'bg-red-50 border-red-300 text-slate-900 font-bold'
                     : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-2 font-bold">
                   <span
