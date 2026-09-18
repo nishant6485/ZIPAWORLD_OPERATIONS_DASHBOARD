@@ -1,0 +1,72 @@
+// Unified Mock Bills of Lading (BL) & Air Waybills (AWB) for Zipaworld Platform
+
+export const mockBLRecords = [
+  {
+    id: "BL-101",
+    shipmentId: "EXP-2026-00125",
+    mode: "Ocean",
+    documentType: "Ocean Bill of Lading",
+    blNumber: "MEDU19284712",
+    blType: "MBL",
+    shipper: "Apex Global Spices Ltd",
+    consignee: "EuroFood Importers GmbH",
+    vesselFlight: "MSC Lauren / 2609E",
+    polOrigin: "Nhava Sheva (JNPT)",
+    podDestination: "Hamburg",
+    status: "Draft Pending Approval",
+    stage: "SI Submitted — Awaiting Draft BL Confirmation",
+    createdDate: "2026-09-13",
+    assignedTo: "Rahul Sharma"
+  },
+  {
+    id: "BL-102",
+    shipmentId: "EXP-2026-00126",
+    mode: "Ocean",
+    documentType: "Ocean Bill of Lading",
+    blNumber: "CMAU99120412",
+    blType: "MBL",
+    shipper: "Reliance Industries Ltd",
+    consignee: "Gulf Packaging Co",
+    vesselFlight: "CMA CGM Jacques Saade / 0912E",
+    polOrigin: "Hazira Port",
+    podDestination: "Jebel Ali",
+    status: "Draft Approved",
+    stage: "Approved by Customer — Ready for Final Print",
+    createdDate: "2026-09-14",
+    assignedTo: "Rahul Sharma"
+  },
+  {
+    id: "AWB-201",
+    shipmentId: "AEX-2026-00101",
+    mode: "Air",
+    documentType: "Air Waybill (MAWB / HAWB)",
+    blNumber: "MAWB: 020-88419203 / HAWB-FRA-9921",
+    blType: "Both",
+    shipper: "Foxconn India Electronics",
+    consignee: "Apple Distribution Center",
+    vesselFlight: "Lufthansa Flight LH761",
+    polOrigin: "Chennai Airport (MAA)",
+    podDestination: "Frankfurt Airport (FRA)",
+    status: "Executed & Released",
+    stage: "RCS Accepted at Airport Cargo Terminal",
+    createdDate: "2026-09-16",
+    assignedTo: "Priya Sundaram"
+  },
+  {
+    id: "AWB-202",
+    shipmentId: "AIM-2026-00201",
+    mode: "Air",
+    documentType: "Air Waybill (MAWB / HAWB)",
+    blNumber: "MAWB: 020-44910294 / HAWB-DEL-5510",
+    blType: "Both",
+    shipper: "Siemens Healthineers",
+    consignee: "Max Super Speciality Hospital",
+    vesselFlight: "Lufthansa Flight LH760",
+    polOrigin: "Frankfurt Airport (FRA)",
+    podDestination: "Delhi Airport (DEL)",
+    status: "Verified",
+    stage: "Air Cargo Unloaded — BOE Customs Verification",
+    createdDate: "2026-09-15",
+    assignedTo: "Ananya Roy"
+  }
+];

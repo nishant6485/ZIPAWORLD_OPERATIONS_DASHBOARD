@@ -1,0 +1,189 @@
+import React from 'react';
+import { useOperations } from '../context/OperationsContext';
+import { Ship, Plane, Layers, User, Calendar } from 'lucide-react';
+
+export function FilterBar() {
+  const {
+    currentUser,
+    activeMode,
+    setActiveMode,
+    activeDirection,
+    setActiveDirection,
+    activeShipmentType,
+    setActiveShipmentType,
+    globalDateFilter,
+    setGlobalDateFilter,
+    executiveFilter,
+    setExecutiveFilter,
+    executives
+  } = useOperations();
+
+  const hasOceanAccess = currentUser.access.includes('Ocean');
+  const hasAirAccess = currentUser.access.includes('Air');
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs mb-6 flex flex-wrap items-center justify-between gap-4">
+      
+      {/* Mode & Direction Selectors */}
+      <div className="flex flex-wrap items-center gap-3">
+        
+        {/* MODE SELECTOR */}
+        <div className="flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200">
+          {hasOceanAccess && hasAirAccess && (
+            <button
+              onClick={() => { setActiveMode('ALL'); setActiveShipmentType('ALL'); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeMode === 'ALL' ? 'bg-red-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>ALL</span>
+            </button>
+          )}
+
+          {hasOceanAccess && (
+            <button
+              onClick={() => { setActiveMode('Ocean'); setActiveShipmentType('ALL'); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeMode === 'Ocean' ? 'bg-sky-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Ship className="w-3.5 h-3.5" />
+              <span>OCEAN</span>
+            </button>
+          )}
+
+          {hasAirAccess && (
+            <button
+              onClick={() => { setActiveMode('Air'); setActiveShipmentType('ALL'); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeMode === 'Air' ? 'bg-teal-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Plane className="w-3.5 h-3.5" />
+              <span>AIR</span>
+            </button>
+          )}
+        </div>
+
+        {/* DIRECTION SELECTOR */}
+        <div className="flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200">
+          <button
+            onClick={() => setActiveDirection('ALL')}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+              activeDirection === 'ALL' ? 'bg-slate-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            ALL DIR
+          </button>
+          <button
+            onClick={() => setActiveDirection('EXPORT')}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+              activeDirection === 'EXPORT' ? 'bg-emerald-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            EXPORT
+          </button>
+          <button
+            onClick={() => setActiveDirection('IMPORT')}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+              activeDirection === 'IMPORT' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            IMPORT
+          </button>
+        </div>
+
+        {/* DYNAMIC SHIPMENT TYPE FILTER */}
+        {activeMode === 'Ocean' && (
+          <div className="flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200">
+            <button
+              onClick={() => setActiveShipmentType('ALL')}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeShipmentType === 'ALL' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              ALL TYPE
+            </button>
+            <button
+              onClick={() => setActiveShipmentType('FCL')}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeShipmentType === 'FCL' ? 'bg-sky-700 text-white' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              FCL
+            </button>
+            <button
+              onClick={() => setActiveShipmentType('LCL')}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeShipmentType === 'LCL' ? 'bg-indigo-700 text-white' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              LCL
+            </button>
+          </div>
+        )}
+
+        {activeMode === 'Air' && (
+          <div className="flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200">
+            <button
+              onClick={() => setActiveShipmentType('ALL')}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeShipmentType === 'ALL' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              ALL TYPE
+            </button>
+            <button
+              onClick={() => setActiveShipmentType('Air Cargo')}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                activeShipmentType === 'Air Cargo' ? 'bg-teal-700 text-white' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              AIR CARGO
+            </button>
+          </div>
+        )}
+
+      </div>
+
+      {/* Executive & Date Range Selectors */}
+      <div className="flex items-center gap-3">
+        
+        {/* Executive Filter Dropdown */}
+        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
+          <User className="w-3.5 h-3.5 text-slate-500" />
+          <select
+            value={executiveFilter}
+            onChange={(e) => setExecutiveFilter(e.target.value)}
+            className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+          >
+            <option value="ALL" className="bg-white text-slate-800">All Executives</option>
+            {executives.map(exec => (
+              <option key={exec.id} value={exec.name} className="bg-white text-slate-800">
+                {exec.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Date Filter Dropdown */}
+        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800">
+          <Calendar className="w-3.5 h-3.5 text-slate-500" />
+          <select
+            value={globalDateFilter}
+            onChange={(e) => setGlobalDateFilter(e.target.value)}
+            className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+          >
+            <option value="7d" className="bg-white text-slate-800">Last 7 Days</option>
+            <option value="30d" className="bg-white text-slate-800">Last 30 Days</option>
+            <option value="90d" className="bg-white text-slate-800">Last 90 Days</option>
+            <option value="This Month" className="bg-white text-slate-800">This Month</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
